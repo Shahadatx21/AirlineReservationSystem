@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Airline Reservation — Complete Demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  </head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container container-wide d-flex justify-content-between align-items-center">
+      <a class="navbar-brand logo" href="#">Airline<span class="muted">Reserve</span></a>
+      <div class="d-flex gap-3 align-items-center">
+        <a class="nav-link" href="#search">Book Flight</a>
+        <a class="nav-link" href="#manage" id="navBookings">My Bookings</a>
+        <a class="nav-link" href="#contact">Contact</a>
+        <div id="userArea"><button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button></div>
+      </div>
+    </div>
+  </nav>
+
+  <header class="container container-wide hero my-3" style="background:linear-gradient(180deg, rgba(13,110,253,0.92), rgba(102,16,242,0.92)), url('https://images.unsplash.com/photo-1508610048659-a06f7d2f8e12?q=80&w=1400&auto=format&fit=crop&s='); background-size:cover; color:white; padding:36px; border-radius:12px;">
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <h1 class="display-6 fw-bold">Airline Reservation System</h1>
+        <p class="lead">India + international routes, seats, rich Indian food choices, and INR payments — demo UI that works end-to-end.</p>
+      </div>
+      <div class="col-lg-5 text-end d-none d-lg-block">
+        <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=600&auto=format&fit=crop&s=" alt="plane" style="max-width:320px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.18)">
+      </div>
+    </div>
+  </header>
+
+  <main class="container container-wide">
+    <!-- SEARCH -->
+    <section id="search" class="card card-body mb-4">
+      <form id="searchForm" class="row g-3 align-items-end">
+        <div class="col-12 col-md-3">
+          <label class="form-label">From</label>
+          <input list="airports" id="fromAirport" class="form-control" placeholder="City / Airport / Code (e.g. Delhi or DEL)" required>
+        </div>
+        <div class="col-12 col-md-3">
+          <label class="form-label">To</label>
+          <input list="airports" id="toAirport" class="form-control" placeholder="City / Airport / Code" required>
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label">Departure</label>
+          <input type="date" id="flightDate" class="form-control" required>
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label">Passengers</label>
+          <input type="number" id="passengers" class="form-control" min="1" value="1">
+        </div>
+        <div class="col-12 col-md-2 text-end">
+          <button class="btn btn-primary w-100" type="submit">Search flights</button>
+        </div>
+      </form>
+
+      <datalist id="airports">
+        <!-- India -->
+        <option value="Delhi - Indira Gandhi (DEL)"></option>
+        <option value="Mumbai - Chhatrapati Shivaji (BOM)"></option>
+        <option value="Bengaluru - Kempegowda (BLR)"></option>
+        <option value="Kolkata - Netaji Subhash Ch. (CCU)"></option>
+        <option value="Chennai - MAA (MAA)"></option>
+        <option value="Hyderabad - RGIA (HYD)"></option>
+        <option value="Kochi - COK (COK)"></option>
+        <option value="Goa - Dabolim (GOI)"></option>
+        <option value="Ahmedabad - AMD (AMD)"></option>
+        <option value="Lucknow - LKO (LKO)"></option>
+        <option value="Pune - PNQ (PNQ)"></option>
+        <option value="Jaipur - JAI (JAI)"></option>
+        <!-- International -->
+        <option value="Dubai - DXB (DXB)"></option>
+        <option value="London - Heathrow (LHR)"></option>
+        <option value="Singapore - Changi (SIN)"></option>
+        <option value="Bangkok - BKK (BKK)"></option>
+        <option value="Kuala Lumpur - KUL (KUL)"></option>
+        <option value="Doha - DOH (DOH)"></option>
+        <option value="New York - JFK (JFK)"></option>
+        <option value="Sydney - SYD (SYD)"></option>
+      </datalist>
+
+      <div id="searchResults" class="mt-4" style="display:none">
+        <h5>Available flights</h5>
+        <div id="flightsGrid" class="row g-3"></div>
+      </div>
+    </section>
+
+    <!-- DETAILS -->
+    <div class="row g-3">
+      <div class="col-lg-8">
+        <div id="flightDetails" class="card card-body" style="display:none">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h5 id="selectedFlightTitle"></h5>
+              <div id="selectedFlightSub" class="muted"></div>
+            </div>
+            <div><span class="price-badge" id="selectedPrice"></span></div>
+          </div>
+
+          <hr>
+          <div class="row">
+            <div class="col-md-6">
+              <h6>Seat selection</h6>
+              <div id="seatMap" class="p-2"></div>
+              <div class="muted mt-2">Select up to the number of passengers. Seats become occupied after payment.</div>
+            </div>
+
+            <div class="col-md-6">
+              <h6>Food & Beverages — Indian & international (veg-first)</h6>
+              <div id="extrasList" class="d-flex flex-wrap gap-2"></div>
+              <div class="mt-3">
+                <button id="saveExtras" class="btn btn-outline-primary btn-sm">Save Extras</button>
+                <button id="clearExtras" class="btn btn-link text-muted btn-sm">Clear</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="col-lg-4">
+        <div class="card card-body mb-3">
+          <h6>Booking summary</h6>
+          <div id="summaryBody">No flight selected</div>
+
+          <div id="costPanel" style="display:none" class="mt-3">
+            <ul id="costItems" class="list-unstyled"></ul>
+            <div class="d-flex justify-content-between"><div>Subtotal</div><div id="costSubtotal">₹0.00</div></div>
+            <div class="d-flex justify-content-between"><div>Extras</div><div id="costExtras">₹0.00</div></div>
+            <div class="d-flex justify-content-between fw-bold mt-2"><div>Total</div><div id="costTotal">₹0.00</div></div>
+            <div class="mt-3"><button id="checkoutBtn" class="btn btn-success w-100">Proceed to payment</button></div>
+            <div class="form-check mt-2"><input id="agreeTerms" class="form-check-input" type="checkbox"><label class="form-check-label muted">I confirm passenger details</label></div>
+          </div>
+        </div>
+
+        <div class="card card-body muted">
+          <h6>Quick routes</h6>
+          <div id="miniAvailability" style="max-height:160px;overflow:auto"></div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- MANAGE BOOKINGS -->
+    <section id="manage" class="card card-body mt-4">
+      <h5>My bookings</h5>
+      <div id="bookingsList"></div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="card card-body mt-4">
+      <h5>Contact & Support</h5>
+      <p class="muted">Support hours: Mon–Sat 09:00–18:00 (local). For urgent travel or safety issues call immediately.</p>
+      <ul>
+        <li><strong>Email:</strong> support@airlinereserve.demo</li>
+        <li><strong>Sales:</strong> +91 98765 43210</li>
+        <li><strong>Support:</strong> +91 91234 56789</li>
+        <li><strong>Office:</strong> 12/A Airline Tower, Mumbai — Mon–Sat 09:00–18:00</li>
+      </ul>
+      <p class="muted">This is a UI demo; production requires backend services for seat locking, payment processing and secure auth.</p>
+    </section>
+  </main>
+
+  <footer>© 2025 AirlineReserve — Demo</footer>
+
+  <!-- MODALS -->
+  <div class="modal fade" id="loginModal"><div class="modal-dialog modal-sm modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h6>Login</h6><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><form id="loginForm"><input id="loginEmail" class="form-control mb-2" type="email" placeholder="Email" required><input id="loginPass" class="form-control mb-2" type="password" placeholder="Password" required><div class="d-grid gap-2"><button class="btn btn-primary" type="submit">Login</button><button id="openSignup" type="button" class="btn btn-outline-secondary">Sign up</button></div></form></div></div></div></div>
+
+  <div class="modal fade" id="signupModal"><div class="modal-dialog modal-sm modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h6>Sign up</h6><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><form id="signupForm"><input id="regName" class="form-control mb-2" placeholder="Full name" required><input id="regEmail" class="form-control mb-2" type="email" placeholder="Email" required><input id="regPass" class="form-control mb-2" type="password" placeholder="Password" required><div class="d-grid"><button class="btn btn-success" type="submit">Create account</button></div></form></div></div></div></div>
+
+  <div class="modal fade" id="paymentModal"><div class="modal-dialog modal-md modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h6>Payment (Demo)</h6><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body">
+    <div class="d-flex justify-content-between align-items-center mb-2"><div>Amount</div><div class="h5" id="payAmount">₹0.00</div></div>
+
+    <div class="mb-3">
+      <label class="form-label">Method</label>
+      <select id="payMethod" class="form-select">
+        <option value="card">Card</option>
+        <option value="upi">UPI / QR</option>
+        <option value="netbank">Net Banking</option>
+        <option value="wallet">Wallet</option>
+      </select>
+    </div>
+
+    <div id="cardPane">
+      <input id="payName" class="form-control mb-2" placeholder="Name on card">
+      <input id="payCard" class="form-control mb-2" placeholder="1234 5678 9012 3456">
+      <div class="d-flex gap-2 mb-2"><input id="payExp" class="form-control" placeholder="MM/YY"><input id="payCvv" class="form-control" placeholder="CVV"></div>
+    </div>
+
+    <div id="upiPane" style="display:none">
+      <div class="scanner mb-2">QR preview will appear after scan/txn</div>
+      <div class="d-flex gap-2 mb-2">
+        <button id="scanBtn" class="btn btn-outline-primary btn-sm">Scan (simulate)</button>
+        <input id="upiId" class="form-control" placeholder="UPI txn id (or scanned)">
+      </div>
+      <div class="mt-2 text-center"><img id="qrImg" class="qr-preview mx-auto" src="" alt="QR preview (txn)"/></div>
+    </div>
+
+    <div id="otherPane" style="display:none">
+      <input id="otherRef" class="form-control mb-2" placeholder="Reference / Transaction id">
+    </div>
+
+    <div class="mt-3">
+      <div id="paymentNotice" class="muted small mb-2"></div>
+      <button id="confirmPayment" class="btn btn-success w-100">Pay & Confirm</button>
+    </div>
+  </div></div></div></div>
+
+  <div class="modal fade" id="receiptModal"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h6>Receipt</h6><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body" id="receiptBody"></div><div class="modal-footer"><button id="printReceipt" class="btn btn-outline-secondary">Print</button></div></div></div></div>
+</body>
+</html>
