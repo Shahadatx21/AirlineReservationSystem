@@ -1,59 +1,13 @@
 ✈️ Airline Reservation System
-
-A complete Java Spring Boot + JSP + MySQL based Airline Reservation System that allows users to search flights, book tickets, add food, view booking history, cancel bookings, and includes an admin panel to manage flights.
-
-⭐ Features
-👤 User Features
-
-Search flights
-
-Book tickets with seat validation
-
-Choose optional food
-
-Auto total fare calculation
-
-View booking history
-
-Cancel a booking
-
-Beautiful responsive UI
-
-🔐 Admin Features
-
-Login with admin credentials
-
-Add new flights
-
-View all bookings
-
-Cancel any booking
-
-Manage seat availability
-
-Professional admin console
-
 🛠️ Tech Stack
-Backend
 
-Spring Boot (MVC)
+Java (Spring Boot, MVC)
 
-Spring Data JPA (Hibernate)
+Hibernate / JPA
 
-Java 21
-
-Frontend
-
-JSP
-
-HTML / CSS
-
-JSTL
-
-Database
+JSP + JSTL
 
 MySQL 8.0
-
 
 📂 Project Structure
 airline-reservation-system/
@@ -66,48 +20,40 @@ airline-reservation-system/
 │   └── AirlineReservationSystemApplication.java
 │
 ├── src/main/webapp/
-│   ├── WEB-INF/
-│   ├── pages/ (JSP files)
+│   ├── pages/        (JSP files)
 │   ├── css/
 │   ├── images/
 │   └── index.jsp
 │
 └── pom.xml
 
-
-🧩 Database ER Diagram
-
-┌──────────┐        ┌───────────┐        ┌──────────┐
-│  Flight  │ 1───∞  │  Booking  │ ∞───1  │   User   │
-└──────────┘        └───────────┘        └──────────┘
-       │                   │
-       │ 1───∞             │
-       ▼                   ▼
-┌──────────┐        ┌──────────┐
-│   Food   │        │  Admin   │
-└──────────┘        └──────────┘
-
-
-
+🗃️ Database ER Diagram
+ Flight   1 ─── ∞   Booking   ∞ ─── 1   User
+               │
+               ∞
+               │
+              Food
 
 🚀 How to Run the Project
-1. Clone the repository
-git clone https://github.com/your-username/AirlineReservationSystem.git
+1️⃣ Clone the repository
+git clone https://github.com/Shahadatx21/AirlineReservationSystem.git
 
-2. Open in IntelliJ / Eclipse
-3. Create MySQL database
+2️⃣ Open in IntelliJ / Eclipse
+3️⃣ Create MySQL Database
 CREATE DATABASE airdb;
 
-4. Update MySQL username/password in application.properties
+4️⃣ Update application.properties
 spring.datasource.url=jdbc:mysql://localhost:3306/airdb
 spring.datasource.username=root
-spring.datasource.password=your_password
+spring.datasource.password=YOUR_PASSWORD
 spring.jpa.hibernate.ddl-auto=update
 
-5. Run the Spring Boot Application
-🔑 Admin Login
+5️⃣ Run the project
+mvn spring-boot:run
 
-Use this default admin:
+6️⃣ Open in browser
+http://localhost:8081/
 
-username: admin
-password: admin123
+🔐 Default Admin Login
+INSERT INTO user(username, password, role)
+VALUES ('admin', 'admin', 'ADMIN');
