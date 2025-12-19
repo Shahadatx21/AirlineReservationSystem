@@ -149,7 +149,7 @@ http://localhost:8081/login
 
 ## 👨‍💻 Author
 
-**Shubham Kumar**,
+**Shubham r**,
 **Rudra Rajeev Srivastav**,
 **Shahadat Hossain**
 
